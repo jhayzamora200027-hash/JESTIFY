@@ -1,0 +1,46 @@
+{
+  "info": {
+    "name": "Jestify Offline Music API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "base_url", "value": "http://127.0.0.1:8000/api" },
+    { "key": "token", "value": "" },
+    { "key": "song_id", "value": "1" },
+    { "key": "playlist_id", "value": "1" }
+  ],
+  "item": [
+    {
+      "name": "Authentication",
+      "item": [
+        { "name": "Register", "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\n  \"name\": \"Flutter User\",\n  \"email\": \"flutter@example.com\",\n  \"password\": \"password123\",\n  \"password_confirmation\": \"password123\"\n}" }, "url": "{{base_url}}/register" } },
+        { "name": "Login", "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\n  \"email\": \"flutter@example.com\",\n  \"password\": \"password123\"\n}" }, "url": "{{base_url}}/login" } },
+        { "name": "Logout", "request": { "method": "POST", "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }], "url": "{{base_url}}/logout" } }
+      ]
+    },
+    {
+      "name": "Songs",
+      "item": [
+        { "name": "List Songs", "request": { "method": "GET", "url": "{{base_url}}/songs" } },
+        { "name": "Search", "request": { "method": "GET", "url": "{{base_url}}/search?q=artist" } },
+        { "name": "Show Song", "request": { "method": "GET", "url": "{{base_url}}/songs/{{song_id}}" } },
+        { "name": "Create Metadata", "request": { "method": "POST", "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }, { "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\n  \"title\": \"Song Name\",\n  \"artist\": \"Artist\",\n  \"album\": \"Album Name\",\n  \"genre\": \"Electronic\",\n  \"duration\": 218,\n  \"cover_image\": \"covers/song001.jpg\",\n  \"local_file_identifier\": \"music/song001.mp3\"\n}" }, "url": "{{base_url}}/songs" } },
+        { "name": "Update Metadata", "request": { "method": "PUT", "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }, { "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\n  \"genre\": \"Ambient\"\n}" }, "url": "{{base_url}}/songs/{{song_id}}" } },
+        { "name": "Delete Metadata", "request": { "method": "DELETE", "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }], "url": "{{base_url}}/songs/{{song_id}}" } }
+      ]
+    },
+    {
+      "name": "Playlists, Favorites, History, Settings",
+      "item": [
+        { "name": "List Playlists", "request": { "method": "GET", "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }], "url": "{{base_url}}/playlists" } },
+        { "name": "Create Playlist", "request": { "method": "POST", "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }, { "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\n  \"name\": \"Offline Favorites\",\n  \"description\": \"Songs available on this device\"\n}" }, "url": "{{base_url}}/playlists" } },
+        { "name": "Add Song To Playlist", "request": { "method": "POST", "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }], "url": "{{base_url}}/playlists/{{playlist_id}}/songs/{{song_id}}" } },
+        { "name": "List Favorites", "request": { "method": "GET", "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }], "url": "{{base_url}}/favorites" } },
+        { "name": "Favorite Song", "request": { "method": "POST", "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }], "url": "{{base_url}}/favorites/{{song_id}}" } },
+        { "name": "Record History", "request": { "method": "POST", "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }], "url": "{{base_url}}/history/{{song_id}}" } },
+        { "name": "Get Settings", "request": { "method": "GET", "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }], "url": "{{base_url}}/settings" } },
+        { "name": "Update Settings", "request": { "method": "PUT", "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }, { "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\n  \"settings\": {\n    \"theme\": \"dark\",\n    \"autoplay\": true\n  }\n}" }, "url": "{{base_url}}/settings" } }
+      ]
+    }
+  ]
+}
