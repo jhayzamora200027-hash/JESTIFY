@@ -8,6 +8,12 @@ use App\Http\Controllers\SongController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SettingsController;
 
+Route::get('/health', fn () => response()->json([
+    'success' => true,
+    'message' => 'Service is healthy.',
+    'data' => ['status' => 'ok', 'service' => 'jestify-api'],
+]));
+
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 
@@ -23,9 +29,10 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('/songs/{song}', [SongController::class, 'update']);
     Route::delete('/songs/{song}', [SongController::class, 'destroy']);
 
-    Route::apiResource('playlists', PlaylistController::class)->only(['index', 'store', 'update', 'destroy']);
+    Route::apiResource('playlists', PlaylistController::class)->only(['index', 'store', 'show', 'update', 'destroy']);
     Route::post('/playlists/{playlist}/songs/{song}', [PlaylistController::class, 'addSong']);
     Route::delete('/playlists/{playlist}/songs/{song}', [PlaylistController::class, 'removeSong']);
+    Route::patch('/playlists/{playlist}/songs/reorder', [PlaylistController::class, 'reorderSongs']);
 
     Route::get('/favorites', [FavoriteController::class, 'index']);
     Route::post('/favorites/{song}', [FavoriteController::class, 'store']);
@@ -33,4 +40,5 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::get('/history', [ListeningHistoryController::class, 'index']);
     Route::post('/history/{song}', [ListeningHistoryController::class, 'store']);
+    Route::delete('/history', [ListeningHistoryController::class, 'destroy']);
 });

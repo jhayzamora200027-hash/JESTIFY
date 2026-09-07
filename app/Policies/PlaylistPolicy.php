@@ -20,7 +20,7 @@ class PlaylistPolicy
      */
     public function view(User $user, Playlist $playlist): bool
     {
-        return false;
+        return $user->id === $playlist->user_id;
     }
 
     /**

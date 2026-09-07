@@ -32,6 +32,12 @@ abstract class ApiController extends Controller
 
     protected function paginated(mixed $paginator, string $message, mixed $resource): JsonResponse
     {
-        return $this->success(['items' => $resource, 'pagination' => ['current_page' => $paginator->currentPage(), 'last_page' => $paginator->lastPage(), 'per_page' => $paginator->perPage(), 'total' => $paginator->total()]], $message);
+        return $this->success([
+            'items' => $resource,
+            'current_page' => $paginator->currentPage(),
+            'last_page' => $paginator->lastPage(),
+            'per_page' => $paginator->perPage(),
+            'total' => $paginator->total(),
+        ], $message);
     }
 }

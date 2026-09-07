@@ -3,13 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\UpdateSettingsRequest;
-use App\Http\Resources\UserSettingResource;
 
 class SettingsController extends ApiController
 {
     public function index()
     {
-        return $this->success(UserSettingResource::collection(request()->user()->settings()->latest()->get()), 'Settings retrieved');
+        return $this->success(['user' => request()->user()->only(['id', 'name', 'email'])], 'Settings retrieved');
     }
 
     public function update(UpdateSettingsRequest $request)
@@ -18,6 +17,6 @@ class SettingsController extends ApiController
             request()->user()->settings()->updateOrCreate(['key' => $key], ['value' => $value]);
         }
 
-        return $this->success(UserSettingResource::collection(request()->user()->settings()->latest()->get()), 'Settings updated');
+        return $this->success(['user' => request()->user()->only(['id', 'name', 'email']), 'settings' => request()->user()->settings()->pluck('value', 'key')], 'Settings updated');
     }
 }

@@ -10,12 +10,12 @@ class Song extends Model
     use HasFactory;
 
     protected $fillable = [
-        'title', 'artist', 'album', 'genre', 'duration', 'cover_image', 'local_file_identifier', 'created_by',
+        'title', 'artist', 'album', 'genre', 'duration', 'cover_url', 'audio_url', 'cover_image', 'local_file_identifier', 'is_published', 'created_by',
     ];
 
     protected function casts(): array
     {
-        return ['duration' => 'integer'];
+        return ['duration' => 'integer', 'is_published' => 'boolean'];
     }
 
     public function uploader()

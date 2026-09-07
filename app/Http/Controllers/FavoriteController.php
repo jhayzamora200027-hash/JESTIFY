@@ -16,7 +16,7 @@ class FavoriteController extends ApiController
     public function store(Song $song)
     {
         $favorite = Favorite::firstOrCreate(['user_id' => request()->user()->id, 'song_id' => $song->id]);
-        return $this->success(new FavoriteResource($favorite->load('song')), 'Song favorited', 201);
+        return $this->success(new FavoriteResource($favorite->load('song')), 'Song favorited', $favorite->wasRecentlyCreated ? 201 : 200);
     }
 
     public function destroy(Song $song)

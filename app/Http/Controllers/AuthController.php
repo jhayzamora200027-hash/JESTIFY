@@ -20,7 +20,7 @@ class AuthController extends ApiController
     {
         $user = User::where('email', $request->validated('email'))->first();
         if (! $user || ! Hash::check($request->validated('password'), $user->password)) {
-            return $this->error('Invalid credentials.', ['credentials' => ['The email or password is incorrect.']], 422);
+            return $this->error('Invalid credentials.', [], 401);
         }
         return $this->success(['user' => new UserResource($user), 'token' => $user->createToken('flutter')->plainTextToken], 'Login successful');
     }
@@ -28,6 +28,6 @@ class AuthController extends ApiController
     public function logout()
     {
         request()->user()->currentAccessToken()?->delete();
-        return $this->success(null, 'Logout successful');
+        return $this->success(null, 'Logged out successfully.');
     }
 }

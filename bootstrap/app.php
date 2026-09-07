@@ -6,6 +6,7 @@ use Illuminate\Foundation\Configuration\Middleware;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Validation\ValidationException;
+use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -27,5 +28,12 @@ return Application::configure(basePath: dirname(__DIR__))
         });
         $exceptions->render(function (AuthorizationException $exception, $request) {
             if ($request->is('api/*')) return response()->json(['success' => false, 'message' => 'This action is unauthorized.', 'errors' => []], 403);
+        });
+        $exceptions->render(function (HttpExceptionInterface $exception, $request) {
+            if ($request->is('api/*')) return response()->json(['success' => false, 'message' => $exception->getMessage() ?: 'The requested resource could not be found.', 'errors' => []], $exception->getStatusCode());
+        });
+        $exceptions->render(function (\Throwable $exception, $request) {
+            if (! $request->is('api/*')) return null;
+            return response()->json(['success' => false, 'message' => 'An unexpected server error occurred.', 'errors' => []], 500);
         });
     })->create();
